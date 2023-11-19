@@ -3,7 +3,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-import gudhi as gd #import TDA libary
 from topology import AlephPersistentHomologyCalculation as aleph
 import Autoencoders as encoder 
 from Base_Autoencoder import AutoencoderModel
@@ -121,7 +120,7 @@ class TopologicalSignatureDistance(nn.Module):
 
         self.match_edges = match_edges
 
-        PersistentHomologyCalculation = AlephPersistenHomologyCalculation(True,True)
+        PersistentHomologyCalculation = AlephPersistenHomologyCalculation(use_cycles,sort_selected)
 
         # if use_cycles:
         #     use_aleph = True
