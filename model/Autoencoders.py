@@ -5,10 +5,28 @@ import torch.nn as nn
 from torch.distributions import Normal
 import torch.nn.functional as F
 
-from Base Autencoder import AutoencoderModel
+from Base_Autoencoder import AutoencoderModel
 # Hush the linter: Warning W0221 corresponds to a mismatch between parent class
 # method signature and the child class
 # pylint: disable=W0221
+
+
+class View(nn.Module):
+    def __init__(self, shape):
+        super().__init__()
+        self.shape = shape
+
+    def forward(self, x):
+        return x.view(*self.shape)
+
+class Print(nn.Module):
+    def __init__(self, name):
+        self.name = name
+        super().__init__()
+
+    def forward(self, x):
+        print(self.name, x.size())
+        return x
 
 
 class ConvolutionalAutoencoder(AutoencoderModel):
@@ -57,24 +75,6 @@ class ConvolutionalAutoencoder(AutoencoderModel):
         x_reconst = self.decode(latent)
         reconst_error = self.reconst_error(x, x_reconst)
         return reconst_error, {'reconstruction_error': reconst_error}
-
-
-class View(nn.Module):
-    def __init__(self, shape):
-        super().__init__()
-        self.shape = shape
-
-    def forward(self, x):
-        return x.view(*self.shape)
-
-class Print(nn.Module):
-    def __init__(self, name):
-        self.name = name
-        super().__init__()
-
-    def forward(self, x):
-        print(self.name, x.size())
-        return x
 
 
 class ConvolutionalAutoencoder_2D(AutoencoderModel):
