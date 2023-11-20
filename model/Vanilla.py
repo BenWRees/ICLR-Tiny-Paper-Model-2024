@@ -1,11 +1,11 @@
 """Vanilla models."""
 import torch.nn as nn
 
-from src.models import submodules
-from .base import AutoencoderModel
+import Autoencoders
+from Base_Autoencoder import AutoencoderModel
 
 
-class ConvolutionalAutoencoderModel(submodules.ConvolutionalAutoencoder):
+class ConvolutionalAutoencoderModel(Autoencoders.ConvolutionalAutoencoder):
     """Convolutional autoencoder model.
 
     Same as the submodule but returns MSE loss.
@@ -27,7 +27,7 @@ class VanillaAutoencoderModel(AutoencoderModel):
                  ae_kwargs=None):
         super().__init__()
         ae_kwargs = ae_kwargs if ae_kwargs else {}
-        self.autoencoder = getattr(submodules, autoencoder_model)(**ae_kwargs)
+        self.autoencoder = getattr(Autoencoders, autoencoder_model)(**ae_kwargs)
 
     def forward(self, x):
         return self.autoencoder(x)
