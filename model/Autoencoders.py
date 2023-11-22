@@ -28,7 +28,6 @@ class Print(nn.Module):
         print(self.name, x.size())
         return x
 
-
 class ConvolutionalAutoencoder(AutoencoderModel):
     """Convolutional Autoencoder for MNIST/Fashion MNIST."""
 
@@ -801,3 +800,95 @@ class DeepVAE(AutoencoderModel):
         loss = likelihood + kl_div
         reconst_error = self.reconst_error(x, (reconstruction - 0.5)*2  )
         return loss, {'loss.likelihood': likelihood, 'loss.kl_divergence': kl_div, 'reconstruction_error': reconst_error}
+
+
+#Classic AutoRec encoder
+class AutoRec(AutoencoderModel) :
+    
+    def __init__(self, k=500, d=6040, dropout=0.01) :
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(in_features=d, out_features=k, bias=True),
+            nn.ReLU(True),
+            nn.Dropout(dropout)
+        )
+
+        self.decoder = nn.Sequential(
+            nn.Linear(in_features=k, out_features=d, bias=True),
+            nn.ReLU(True),
+            nn.Dropout(dropout)
+        )
+
+        self.reconst_error = nn.MSELoss()
+
+    def encode(self, x) :
+        return self.encoder(x)
+
+    def decode(self, x) :
+        return self.decoder(x)
+
+    def forward(self, x):
+        latent = self.encode(x)
+        x_reconst = self.decode(latent)
+        reconst_error = self.reconst_error(x, x_reconst * torch.sign(x))
+        return reconst_error, {'reconstruction_error': reconst_error}
+
+    # def backward(self,x) :
+    #   pass
+
+
+#AutoRec Encoder with Regularisation in for
+class AutoRec_Regularisation(AutoencoderModel) :
+
+    def __init__(self, k=500, d=6040, dropout=0.01, regularisation_param=1) :
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(in_features=d, out_features=k, bias=True),
+            nn.Sigmoid(),
+            nn.Dropout(dropout)
+        )
+
+        self.decoder = nn.Sequential(
+            nn.Linear(in_features=k, out_features=d, bias=True),
+            nn.Sigmoid(),
+            nn.Dropout(dropout)
+        )
+
+        self.reconst_error = nn.MSELoss()
+        self.regularisation_param = regularisation_param
+
+    def encode(self, x) :
+        return self.encoder(x)
+
+    def decode(self, x) :
+        return self.decoder(x)
+
+    def regularisation(self) :
+        V = self.encoder[0].weight
+        W = self.decoder[0].weight 
+        return torch.divide(self.regularisation_param,2) * (torch.square(torch.norm(W))+torch.square(torch.norm(V)))
+
+    def forward(self, x):
+        latent = self.encode(x)
+        x_reconst = self.decode(latent)
+        reconst_error = self.reconst_error(x, x_reconst) + self.regularisation() 
+        return reconst_error, {'reconstruction_error': reconst_error}
+
+        # def backward(self, x) :
+        #   pass
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
