@@ -1,5 +1,8 @@
 '''
-Methods for calculating lower-dimensional persistent homology.
+    Methods for calculating lower-dimensional persistent homology.
+    Credit to Moor, Michael, et al. "Topological autoencoders." International conference on machine learning. PMLR, 2020.
+
+
 '''
 
 import numpy as np
