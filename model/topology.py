@@ -92,7 +92,7 @@ class PersistentHomologyCalculation:
         return np.array(persistence_pairs), np.array([])
 
 
-class AlephPersistentHomologyCalculationc():
+class AlephPersistentHomologyCalculation :
     def __init__(self, compute_cycles, sort_selected):
         """Calculate persistent homology using aleph.
 
