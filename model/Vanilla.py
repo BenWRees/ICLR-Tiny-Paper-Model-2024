@@ -1,4 +1,4 @@
-"""Vanilla models."""
+"""Vanilla models - this could be merged with Base_Autoencoder"""
 import torch.nn as nn
 
 import Autoencoders
