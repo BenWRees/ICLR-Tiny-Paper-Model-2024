@@ -1,4 +1,8 @@
-"""Base class for autoencoder models."""
+"""
+    Base class for autoencoder models.
+    Credit to Moor, Michael, et al. "Topological autoencoders." International conference on machine learning. PMLR, 2020.
+
+"""
 import abc
 from typing import Dict, Tuple
 
