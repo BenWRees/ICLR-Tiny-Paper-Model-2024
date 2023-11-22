@@ -1,5 +1,7 @@
 """
 	Functions for processing user and item data into a user-item matrix to be read by the autoencoder
+	Method developed from https://github.com/tuanio/AutoRec as an adaptation to Sedhain, Suvash, et al. 
+	"Autorec: Autoencoders meet collaborative filtering." Proceedings of the 24th international conference on World Wide Web. 2015.
 """
 import torch
 from torch import nn, div, square, norm
