@@ -1,4 +1,9 @@
-"""Training classes."""
+"""
+    Training classes.
+    Credit to Moor, Michael, et al. "Topological autoencoders." International conference on machine learning. PMLR, 2020.
+
+
+"""
 import torch
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
