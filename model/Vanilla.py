@@ -1,4 +1,9 @@
-"""Vanilla models - this could be merged with Base_Autoencoder"""
+"""
+    Vanilla models - this could be merged with Base_Autoencoder
+    Credit to Moor, Michael, et al. "Topological autoencoders." International conference on machine learning. PMLR, 2020.
+
+
+"""
 import torch.nn as nn
 
 import Autoencoders
