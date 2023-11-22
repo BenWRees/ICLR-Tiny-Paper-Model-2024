@@ -1,4 +1,8 @@
-"""Submodules used by models."""
+"""
+    Submodules used by models.
+    Credit to Moor, Michael, et al. "Topological autoencoders." International conference on machine learning. PMLR, 2020.
+    
+"""
 import numpy as np
 import torch
 import torch.nn as nn
@@ -801,6 +805,10 @@ class DeepVAE(AutoencoderModel):
         reconst_error = self.reconst_error(x, (reconstruction - 0.5)*2  )
         return loss, {'loss.likelihood': likelihood, 'loss.kl_divergence': kl_div, 'reconstruction_error': reconst_error}
 
+"""
+    AutoRec Autoencoders.
+    Method developed from https://github.com/tuanio/AutoRec 
+"""
 
 #Classic AutoRec encoder
 class AutoRec(AutoencoderModel) :
