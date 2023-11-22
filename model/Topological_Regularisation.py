@@ -3,8 +3,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from topology import AlephPersistentHomologyCalculation as aleph
-import Autoencoders as encoder 
+from topology import AlephPersistentHomologyCalculation
+import Autoencoders
 from Base_Autoencoder import AutoencoderModel
 
 
@@ -91,6 +91,7 @@ class TopologicallyRegularizedAutoencoder(AutoencoderModel):
         }
         loss_components.update(topo_error_components)
         loss_components.update(ae_loss_comp)
+        
         return (
             loss,
             loss_components
@@ -120,7 +121,6 @@ class TopologicalSignatureDistance(nn.Module):
 
         self.match_edges = match_edges
 
-        PersistentHomologyCalculation = AlephPersistenHomologyCalculation(use_cycles,sort_selected)
 
         # if use_cycles:
         #     use_aleph = True
@@ -136,7 +136,7 @@ class TopologicalSignatureDistance(nn.Module):
         ##    compute_cycles=use_cycles, sort_selected=sort_selected)
         # else:
         print('Using python to compute signatures')
-        self.signature_calculator = PersistentHomologyCalculation()
+        self.signature_calculator = AlephPersistentHomologyCalculation(use_cycles,sort_selected)
 
     def _get_pairings(self, distances):
         pairs_0, pairs_1 = self.signature_calculator(
