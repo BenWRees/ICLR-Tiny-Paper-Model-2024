@@ -18,17 +18,23 @@ import time
 
 class CollabFilteringPreProcessing :
 
-	def __init__(self, datapaths, seed=12, batch_size=512) :
+	def __init__(self, datapaths, seed=12, batch_size=512, split_test_percent=0.2) :
 		self.datapaths = datapaths
 		self.seed = seed
 		self.batch_size = batch_size
+		self.split_test_percent = split_test_percent
 		self.users_dat, self.items_dat, self.ratings = self.read_csvs()
+		print('user data: \n', self.users_dat)
+		print('items data: \n', self.items_dat)
+		print('ratings data: \n', self.ratings)
 
 	def __call__(self) :
 
 		train_items, test_items = self.split_data(self.items_dat[0].max())
 		self.user_item_mat = torch.zeros((self.get_num_users(), self.get_num_items()))
 		self.user_item_mat = self.populate_user_item_matrix(self.ratings, self.user_item_mat)
+
+		print('user item matrix: \n', self.user_item_mat)
 	
 
 		train_dp = self.create_datapipe_from_array(train_items, 'train', self.batch_size)
@@ -66,7 +72,7 @@ class CollabFilteringPreProcessing :
 		return users_dat, items_dat, ratings
 
 	def split_data(self,num_items) :
-		train_items, test_items = train_test_split(torch.arange(num_items),test_size=0.2,random_state=self.seed)
+		train_items, test_items = train_test_split(torch.arange(num_items),test_size=self.split_test_percent,random_state=self.seed)
 		return train_items, test_items
 
 	def create_data_from_line(self,line, user_item_mat):
