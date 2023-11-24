@@ -6,6 +6,7 @@
 '''
 
 import numpy as np
+import aleph
 
 
 class UnionFind:
@@ -116,7 +117,6 @@ class AlephPersistentHomologyCalculation :
 
         Returns: tuple(edge_featues, cycle_features)
         """
-        import aleph
         if self.compute_cycles:
             pairs_0, pairs_1 = aleph.vietoris_rips_from_matrix_2d(
                 distance_matrix)
