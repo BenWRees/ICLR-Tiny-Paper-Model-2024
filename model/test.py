@@ -13,20 +13,21 @@ import matplotlib.pyplot as plt
 import time
 import sys 
 
-sys.path.insert(1,'/Users/benjaminrees/Desktop/ICLR-Tiny-Paper-Model-2024/Data_Processing')
+sys.path.insert(1,'/Users/aiden/OneDrive/Documents/GitHub/ICLR-Tiny-Paper-Model-2024/Data_Processing')
 
 
 
-from AutoRec import *
-from Autoencoders import ConvolutionalAutoencoder
-from Topological_Regularisation import TopologicallyRegularizedAutoencoder
+#from AutoRec import *
+from Autoencoders import *
+from topological_regularisation import TopologicallyRegularizedAutoencoder
 from training import TrainingLoop
-from visualisations import *
+from validation import ValidationLoop
+#from visualisations import *
 from data_preprocessing import CollabFilteringPreProcessing
 
 
-data_filter = CollabFilteringPreProcessing(['/Users/benjaminrees/Desktop/ml-1m/users.dat',
-    '/Users/benjaminrees/Desktop/ml-1m/movies.dat', '/Users/benjaminrees/Desktop/ml-1m/ratings.dat'],12,512)
+data_filter = CollabFilteringPreProcessing(['/Users/aiden/OneDrive/Documents/GitHub/ICLR-Tiny-Paper-Model-2024/ml-1m/users.dat',
+    '/Users/aiden/OneDrive/Documents/GitHub/ICLR-Tiny-Paper-Model-2024/ml-1m/movies.dat', '/Users/aiden/OneDrive/Documents/GitHub/ICLR-Tiny-Paper-Model-2024/ml-1m/ratings.dat'],12,512)
 
 num_users = data_filter.get_num_users()
 
@@ -45,20 +46,36 @@ train_dp, test_dp = data_filter()
 user_item_mat = data_filter.get_user_item_matrix()
 
 #need to choose right dataset for this 
-training_one = TrainingLoop(model_one, train_dp, user_item_mat, max_epochs, num_workers, 0.0001)
+training_one = TrainingLoop(model_one, train_dp, user_item_mat, max_epochs, num_workers, 0.001)
 _, loss_one = training_one()
 
+training_two = TrainingLoop(model_two, train_dp, user_item_mat, max_epochs, num_workers, 0.0001)
+_, loss_two = training_one()
 
+testing_one = ValidationLoop(model_one, test_dp, user_item_mat, num_workers)
+_, test_loss_one = testing_one()
+testing_two = ValidationLoop(model_two, test_dp, user_item_mat, num_workers)
+_, test_loss_two = testing_two()
 
 print('end loss one: ', loss_one[-1])
+print('end loss two: ', loss_two[-1])
 
+"""
 plt.title('training loss')
 plt.plot(loss_one)
-plt.legend(['regularisation=0.01'])
+plt.plot(loss_two)
+plt.legend(['regularisation=0.001',
+            'regularisation=0.0001'])
 plt.xlabel('epochs')
 plt.ylabel('loss in MSE')
 plt.show()
+"""
 
+plt.title('test loss')
+plt.plot(test_loss_one)
+plt.plot(test_loss_two)
+plt.xlabel('epochs')
+plt.ylabel('loss in MSE')
 
 #Train AutoRec
 
